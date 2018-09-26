@@ -23,10 +23,10 @@ export class Mockgoose {
     this.mongooseObj.mocked = true;
   }
   
-  prepareStorage(options): Promise<void> {
+  prepareStorage(options: {portOverride: number}): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       let tempDBPathPromise: Promise<string> = this.getTempDBPath();
-      let openPortPromise: Promise<number> = this.getOpenPort(options.portOverride);
+      let openPortPromise: Promise<number> = this.getOpenPort(options ? options.portOverride : null);
       
       Promise.all([tempDBPathPromise, openPortPromise]).then((promiseValues) => {
         let dbPath: string = promiseValues[0];

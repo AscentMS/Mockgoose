@@ -6,10 +6,12 @@ export declare class Mockgoose {
     debug: any;
     mongooseObj: any;
     constructor(mongooseObj: any);
-    prepareStorage(): Promise<void>;
+    prepareStorage(options: {
+        portOverride: number;
+    }): Promise<void>;
     getMockConnectionString(port: string): string;
     mockConnectCalls(connection: string): void;
-    getOpenPort(): Promise<number>;
+    getOpenPort(portOverride: number): Promise<number>;
     getMemoryStorageName(): string;
     getTempDBPath(): Promise<string>;
 }

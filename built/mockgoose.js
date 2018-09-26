@@ -9,7 +9,7 @@ var mongodb_prebuilt_1 = require("mongodb-prebuilt");
 var mockgoose_helper_1 = require("./mockgoose-helper");
 //const uuidV4 = require('uuid/v4');
 var uuidV4 = require('uuid/v4');
-var Mockgoose = (function () {
+var Mockgoose = /** @class */ (function () {
     function Mockgoose(mongooseObj) {
         this.mongodHelper = new mongodb_prebuilt_1.MongodHelper();
         this.debug = Debug('Mockgoose');
@@ -17,11 +17,11 @@ var Mockgoose = (function () {
         this.mongooseObj = mongooseObj;
         this.mongooseObj.mocked = true;
     }
-    Mockgoose.prototype.prepareStorage = function () {
+    Mockgoose.prototype.prepareStorage = function (options) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var tempDBPathPromise = _this.getTempDBPath();
-            var openPortPromise = _this.getOpenPort();
+            var openPortPromise = _this.getOpenPort(options ? options.portOverride : null);
             Promise.all([tempDBPathPromise, openPortPromise]).then(function (promiseValues) {
                 var dbPath = promiseValues[0];
                 var openPort = promiseValues[1].toString();
@@ -56,8 +56,12 @@ var Mockgoose = (function () {
         var connect = new ConnectionWrapper('connect', this.mongooseObj, connection);
         this.mongooseObj.connect = function () { return connect.run(arguments); };
     };
-    Mockgoose.prototype.getOpenPort = function () {
+    Mockgoose.prototype.getOpenPort = function (portOverride) {
         return new Promise(function (resolve, reject) {
+            if (portOverride) {
+                resolve(portOverride);
+                return;
+            }
             portfinder.getPort({ port: 27017 }, function (err, port) {
                 if (err) {
                     reject(err);
@@ -85,7 +89,7 @@ var Mockgoose = (function () {
     return Mockgoose;
 }());
 exports.Mockgoose = Mockgoose;
-var ConnectionWrapper = (function () {
+var ConnectionWrapper = /** @class */ (function () {
     function ConnectionWrapper(functionName, mongoose, connectionString) {
         this.functionName = functionName;
         this.mongoose = mongoose;
@@ -101,4 +105,4 @@ var ConnectionWrapper = (function () {
     return ConnectionWrapper;
 }());
 exports.ConnectionWrapper = ConnectionWrapper;
-//# sourceMappingURL=/Users/winfinit/workspace/personal/Mockgoose/mockgoose.js.map
+//# sourceMappingURL=C:/Users/lee-c/Documents/EVERGREEN/Mockgoose/mockgoose.js.map
